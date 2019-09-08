@@ -69,6 +69,10 @@ class ABCNNText(torch.nn.Module):
         """
         x = self.embed(words)  # [N,L] -> [N,L,C]
         x = torch.transpose(x, 1, 2) # [N,C,L]
+        if seq_len is not None:
+            mask = seq_len_to_mask(seq_len)
+            mask = mask.unsqueeze(1)  # B x 1 x L
+            x = x.masked_fill_(mask.eq(0), float('-inf')) # ->[N,C,L]
         x = self.convs(x)  #[N,C,L]
         x = F.relu(x)
         x = self.dropout(x)

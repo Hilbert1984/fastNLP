@@ -32,7 +32,7 @@ class ABLSTMText(torch.nn.Module):
                  num_classes,
                  hidden_dim=150, 
                  num_layers=1,
-                 dropout=0.25):
+                 dropout=0.5):
         super(ABLSTMText, self).__init__()
         
 
@@ -73,6 +73,12 @@ class ABLSTMText(torch.nn.Module):
         :return output: dict of torch.LongTensor, [batch_size, num_classes]
         """
         x = self.embed(words)  # [N,L] -> [N,L,C]
+        x = torch.transpose(x, 1, 2) # ->[N,C,L]
+        if seq_len is not None:
+            mask = seq_len_to_mask(seq_len)
+            mask = mask.unsqueeze(1)  # B x 1 x L
+            x = x.masked_fill_(mask.eq(0), float('-inf')) # ->[N,C,L]
+        x = torch.transpose(x, 1, 2) # ->[N,L,C]
         x = self.dropout(x)
         x = torch.transpose(x, 0,1) # ->[L,N,C]
         output, (hidden, cell) = self.lstm(x)
