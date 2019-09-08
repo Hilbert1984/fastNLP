@@ -9,7 +9,11 @@ fastNLP 在 :mod:`~fastNLP.models` 模块中内置了如 :class:`~fastNLP.models
 """
 __all__ = [
     "CNNText",
-    
+    "ACBiLSTMText",
+    "ABCNNText",
+    "ABLSTMText",
+    "CLSTMText",
+
     "SeqLabeling",
     "AdvSeqLabel",
     
@@ -32,3 +36,7 @@ from .cnn_text_classification import CNNText
 from .sequence_labeling import SeqLabeling, AdvSeqLabel
 from .snli import ESIM
 from .star_transformer import StarTransEnc, STSeqCls, STNLICls, STSeqLabel
+from .acbilstm_text_classification import ACBiLSTMText
+from .abcnn_text_classification import ABCNNText
+from .ablstm_text_classification import ABLSTMText
+from .clstm_text_classification import CLSTMText
